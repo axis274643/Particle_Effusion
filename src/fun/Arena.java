@@ -116,11 +116,11 @@ public class Arena {
 		
         
         JFrame frame = new JFrame();
-		frame.setSize(1000, 1000);
+		frame.setSize(2000, 1000);
         frame.setLocation(2000,0);
         frame.setVisible(true);
         
-        Graph g = new Graph();
+        Graph g = new Graph("Time (s)", "Density", 10.0, 1.0/50);
         g.addLine(leftLine);
         g.addLine(rightLine);
 		frame.add(g);

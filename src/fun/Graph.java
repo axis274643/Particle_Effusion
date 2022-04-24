@@ -24,16 +24,37 @@ public class Graph extends JPanel{
 	public static int originX = 200;
 	public static int originY = 600;
 	
+	public static String axisTitleX = "";
+	public static String axisTitleY = "";
+	
+	public static double axisScaleX = 0;
+	public static double axisScaleY = 0;
+	
 	public ArrayList<ArrayList<Point>> lines = new ArrayList<ArrayList<Point>>();
 	public Color color;
 	
 	public Graph(){
-		
 		setLayout(null);
         setVisible(true);
-        
-        
     }
+	
+	public Graph(String titleX, String titleY){
+		 axisTitleX = titleX;
+	     axisTitleY = titleY;
+		
+	     setLayout(null);
+	     setVisible(true);
+    }
+	
+	public Graph(String titleX, String titleY, double scaleX, double scaleY){
+		 axisTitleX = titleX;
+	     axisTitleY = titleY;
+	     axisScaleX = scaleX;
+	     axisScaleY = scaleY;
+		
+	     setLayout(null);
+	     setVisible(true);
+   }
 	
 	public void addLine(ArrayList<Point> l) {
 		lines.add(l);
@@ -47,10 +68,22 @@ public class Graph extends JPanel{
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         
-        g2d.drawLine(0,originY, 1000, originY);
-        g2d.drawLine(originX, 0, originX, 1000);
+        g2d.drawLine(0,originY, 1800, originY);
+        g2d.drawLine(originX, 0, originX, 1800);
+        g2d.drawString(axisTitleX, 1600, originY - 50);
+        g2d.drawString(axisTitleY, originX + 50, 100);
         
-        g2d.setColor(color);
+        if(axisScaleX != 0 && axisScaleY != 0) {
+        	for(int i = 0; i < 1800; i+= 100) {
+        		g2d.drawLine(i, originY - 10, i, originY + 10);
+        		g2d.drawString(String.valueOf(axisScaleX * (i - originX)/100), i - 5, originY + 30);
+        	}
+        	for(int i = 0; i < 1000; i+= 100) {
+        		g2d.drawLine(originX - 10, i, originX + 10, i);
+        		g2d.drawString(String.valueOf(axisScaleY * (originY - i)/100), originX - 50, i + 5);
+        	}
+        }
+        
         for(int i = 0; i < lines.size(); i++) {
         	Point previous = lines.get(i).get(0);
         	if(i == 0) {

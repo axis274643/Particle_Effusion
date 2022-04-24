@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 public class Circle extends JLabel{
-	public static int SPEED = 10;
+	public static int SPEED = 1;
 	public static ArrayList<Circle> allCircles = new ArrayList<Circle>();
 	public static ArrayList<Circle> allPlayers = new ArrayList<Circle>();
 	public static int particleSize = 5;
