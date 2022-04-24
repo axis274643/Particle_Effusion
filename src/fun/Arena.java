@@ -1,11 +1,13 @@
 package fun;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.MouseInfo;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -18,6 +20,10 @@ public class Arena {
 	static JFrame sim = new JFrame();
 	
 	static JPanel panel = new JPanel();
+	
+	static Wall leftLabel = new Wall(300, 600, 300, 100);
+	static Wall rightLabel = new Wall(800, 600, 300, 100);
+	static Wall timeLabel = new Wall(1200, 400, 300, 100);
 	
 	static int posX;
 	static int posY;
@@ -55,6 +61,12 @@ public class Arena {
 	        
 	    });
 		
+		panel.add(leftLabel);
+		panel.add(rightLabel);
+		panel.add(timeLabel);
+		panel.setComponentZOrder(leftLabel, 0);
+		panel.setComponentZOrder(rightLabel,0);
+		panel.setComponentZOrder(timeLabel, 0);
 		
 		//Circle ha = new Player(600,400,1);
 		//panel.add(ha);
@@ -62,8 +74,8 @@ public class Arena {
 		Circle jd = new Player(400,400,0);
 		panel.add(jd);
 		
-		for(int i = 0; i < 1000; i++) {
-			Circle a = new Circle((int)(Math.random()*400 + 200),(int)(Math.random()*300 + 250), Math.random()*3 - 6, Math.random()*3 - 6, (int) (Math.random() + 0.01));
+		for(int i = 0; i < 500; i++) {
+			Circle a = new Circle((int)(Math.random()*400 + 200),(int)(Math.random()*300 + 250), Math.random()*3 - 6, Math.random()*3 - 6, 0);
 			panel.add(a);
 		}
 		
@@ -89,45 +101,52 @@ public class Arena {
 		sim.setVisible(true);
 		
 		
-		Thread.sleep(3000);
+		Thread.sleep(1000);
 		Circle.remove(obstacle3);
 		
-		
 		graphDensity();
-	}
+		
+	}	
+
 	
 	public static void graphDensity() {
-		Thread thread = new Thread() {
-			public void run() {
-				Wall leftLabel = new Wall(300, 600, 300, 100);
-				Wall rightLabel = new Wall(800, 600, 300, 100);
-				panel.add(leftLabel);
-				panel.add(rightLabel);
-				panel.setComponentZOrder(leftLabel, 0);
-				panel.setComponentZOrder(rightLabel,0);
-				Graph g = new Graph();
-				int time = 0;
-				while(true) {
-					sim.repaint();
-					double leftDensity = ParticleMethods.getDensity(posX,posY,700, posY + sizeY);
-					double rightDensity = ParticleMethods.getDensity(700,posY,posX + sizeX, posY + sizeY);
-					leftLabel.setText("Count: " + String.valueOf(ParticleMethods.particlesInside(posX,posY,700, posY + sizeY)) + ", Density: " + String.valueOf(leftDensity));
-					rightLabel.setText("Count: " + String.valueOf(ParticleMethods.particlesInside(700,posY,posX + sizeX, posY + sizeY)) + ", Density: " + String.valueOf(rightDensity));
-					g.point(time, (int) ((double) leftDensity * 500), new Color(255, 0, 0));
-					g.point(time, (int) ((double) rightDensity * 500), new Color(0, 0, 255));
-					
-					time += 1;
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-		};
+		ArrayList<Point> leftLine = new ArrayList<Point>();
+		ArrayList<Point> rightLine = new ArrayList<Point>();
 		
-		thread.start();
+		
+        
+        JFrame frame = new JFrame();
+		frame.setSize(1000, 1000);
+        frame.setLocation(2000,0);
+        frame.setVisible(true);
+        
+        Graph g = new Graph();
+        g.addLine(leftLine);
+        g.addLine(rightLine);
+		frame.add(g);
+		int time = 0;
+		while(true) {
+			double leftDensity = ParticleMethods.getDensity(posX,posY,700, posY + sizeY);
+			double rightDensity = ParticleMethods.getDensity(700,posY,posX + sizeX, posY + sizeY);
+			leftLabel.setText("Count: " + String.valueOf(ParticleMethods.particlesInside(posX,posY,700, posY + sizeY)) + ", Density: " + String.valueOf(leftDensity));
+			rightLabel.setText("Count: " + String.valueOf(ParticleMethods.particlesInside(700,posY,posX + sizeX, posY + sizeY)) + ", Density: " + String.valueOf(rightDensity));
+			timeLabel.setText("Time: " + String.valueOf(time/10) + "s");
+			
+			leftLine.add(new Point(time, (int)(leftDensity * 5000.0)));
+			rightLine.add(new Point(time, (int)(rightDensity * 5000.0)));
+			
+			frame.repaint();
+			
+			time += 1;
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
 	}
 	
 	public static void main(String[] args) throws InterruptedException {

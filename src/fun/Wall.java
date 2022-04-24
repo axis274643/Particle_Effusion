@@ -14,6 +14,8 @@ public class Wall extends Circle{
 		position[0] = (double) x1 + sizeX/2;
 		position[1] = (double) y1 + sizeY/2;
 		
+		wall = true;
+		
 		this.setBackground(new Color(100, 100, 100));
 		this.setSize(sizeX,sizeY);
 		this.setLocation(x1,y1);

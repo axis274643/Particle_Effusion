@@ -27,50 +27,48 @@ public class Player extends Circle{
 		this.setVisible(true);
 		
 		allPlayers.add(this);
-		move(this);
-	}
-	
-	public void move(Player me) {
 		Thread thread = new Thread() {
 			public void run() {
-				while(me.getParent()==null) {
-					try {
-						Thread.sleep(1);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				me.AddKeyControl();
-				while(true) {
-					ArrayList<Circle> temp = new ArrayList<Circle>();
-					for(int i = 0; i < allCircles.size(); i++) {
-						temp.add(allCircles.get(i));
-					}
-					for(Circle c:temp) {
-						if(!me.equals(c) && touching(c)) {
-							if(c.infected == 1) {
-								me.infected = 1;
-								me.setBackground(new Color(255, 255, 0));
-							}
-							bounceRectangle(me, c);
-						}
-					}
-					me.angle = getAngle(velocity[0],velocity[1]);
-					me.position[0] = (me.position[0] + me.velocity[0]);
-					me.position[1] = (me.position[1] + me.velocity[1]);
-					me.setLocation((int)(me.position[0] - me.sizeX/2), (int)(me.position[1] - me.sizeY/2));
-					try {
-						Thread.sleep(SPEED);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
+				move();
 			}
 		};
-		
-		thread.start();
+	}
+	
+	public void move() {
+		while(this.getParent()==null) {
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		this.AddKeyControl();
+		while(true) {
+			ArrayList<Circle> temp = new ArrayList<Circle>();
+			for(int i = 0; i < allCircles.size(); i++) {
+				temp.add(allCircles.get(i));
+			}
+			for(Circle c:temp) {
+				if(!this.equals(c) && touching(c)) {
+					if(c.infected == 1) {
+						this.infected = 1;
+						this.setBackground(new Color(255, 255, 0));
+					}
+					bounceRectangle(this, c);
+				}
+			}
+			this.angle = getAngle(velocity[0],velocity[1]);
+			this.position[0] = (this.position[0] + this.velocity[0]);
+			this.position[1] = (this.position[1] + this.velocity[1]);
+			this.setLocation((int)(this.position[0] - this.sizeX/2), (int)(this.position[1] - this.sizeY/2));
+			try {
+				Thread.sleep(SPEED);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 

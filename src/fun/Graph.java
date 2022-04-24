@@ -1,63 +1,101 @@
 package fun;
 
-import java.awt.*;  
+import java.awt.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
-public class Graph extends JFrame{
+import java.awt.BorderLayout;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.Graphics;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.SwingUtilities;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class Graph extends JPanel{
 	
-	public static int originX = 500;
-	public static int originY = 500;
+	public static int originX = 200;
+	public static int originY = 600;
 	
-	public static int x;
-	public static int y;
-	public static Color color;
-	public static boolean newPoint = false;
+	public ArrayList<ArrayList<Point>> lines = new ArrayList<ArrayList<Point>>();
+	public Color color;
 	
 	public Graph(){
-        setTitle("Drawing a graph");
-        setSize(1000, 1000);
+		
+		setLayout(null);
         setVisible(true);
-        setLocation(2000,0);
+        
+        
     }
+	
+	public void addLine(ArrayList<Point> l) {
+		lines.add(l);
+	}
+	
+	public void updateLine(int index, ArrayList<Point> line) {
+		lines.set(index,  line);
+	}
 
-    public void paint(Graphics g) {
+	@Override
+    public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         
-        for(double x = 0; x < originX*2; x+=0.5) {
-        	g2d.drawOval((int)x, originY, 2, 2);
-        }
-        for(double y = 0; y < originY*2; y+=0.5) {
-        	g2d.drawOval(originX, (int)y, 2, 2);
+        g2d.drawLine(0,originY, 1000, originY);
+        g2d.drawLine(originX, 0, originX, 1000);
+        
+        g2d.setColor(color);
+        for(int i = 0; i < lines.size(); i++) {
+        	Point previous = lines.get(i).get(0);
+        	if(i == 0) {
+        		g2d.setColor(new Color(255, 0, 0));
+        	}else if(i == 1) {
+        		g2d.setColor(new Color(0, 0, 255));
+        	}
+            for(Point p : lines.get(i)) {
+            	g2d.drawLine(previous.x + originX, originY - previous.y, p.x + originX, originY - p.y);
+            	previous = p;
+            }
         }
         
-        while(true) {
-        	while(!newPoint) {
-        		try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-        	}
-        	g2d.setColor(color);
-        	g2d.drawOval(x + originX, 500 - y, 5, 5);
-        	newPoint = false;
-        }
     }
+	
+	public static void main(String[] args) {
+		ArrayList<Point> meow = new ArrayList<Point>();
+		meow.add(new Point(0,500));
+		meow.add(new Point(200,600));
+		meow.add(new Point(800,300));
+		ArrayList<Point> meow2 = new ArrayList<Point>();
+		meow2.add(new Point(0,400));
+		meow2.add(new Point(300,600));
+		meow2.add(new Point(600,200));
+		JFrame frame = new JFrame();
+		frame.setSize(1000, 1000);
+        frame.setVisible(true);
+        frame.setLocation(2000,0);
+		Graph graph = new Graph();
+		graph.addLine(meow);
+		graph.addLine(meow2);
+		frame.add(graph);
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		meow.add(new Point((int)(Math.random()*500),(int)(Math.random() * 500)));
+		
+		meow.add(new Point((int)(Math.random()*500),(int)(Math.random() * 500)));
+		
+		frame.repaint();
+	}
     
-    public void point(int xx, int yy, Color colorcolor) {
-    	x = xx;
-    	y = yy;
-    	color = colorcolor;
-    	newPoint = true;
-    	
-    }
-    
-    
-    
-
-    public static void main(String[] args) {
-       new Graph();
-    }
 
 }

@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 public class Circle extends JLabel{
-	public static int SPEED = 20;
+	public static int SPEED = 10;
 	public static ArrayList<Circle> allCircles = new ArrayList<Circle>();
 	public static ArrayList<Circle> allPlayers = new ArrayList<Circle>();
-	public static int particleSize = 10;
+	public static int particleSize = 5;
 	
 	//random speed from -100 to 100;
 	public Double[] velocity = new Double[2];
@@ -27,6 +27,8 @@ public class Circle extends JLabel{
 	public int angleOfDetection;
 	
 	public int ID;
+	
+	public boolean wall = false;
 	
 	
 	public Circle(double pX, double pY, double vX, double vY, int inf) {
@@ -45,7 +47,13 @@ public class Circle extends JLabel{
 		
 		this.setVisible(true);
 		
-		move(this);
+		Thread thread = new Thread() {
+			public void run() {
+				move();
+			}
+		};
+		
+		thread.start();
 	}
 	
 	public Circle() {
@@ -99,38 +107,32 @@ public class Circle extends JLabel{
 		return Math.atan((double)rectangle.sizeY/rectangle.sizeX);
 	}
 	
-	public void move(Circle me) {
-		Thread thread = new Thread() {
-			public void run() {
-				while(true) {
-					ArrayList<Circle> temp = new ArrayList<Circle>();
-					for(int i = 0; i < allCircles.size(); i++) {
-						temp.add(allCircles.get(i));
+	public void move() {
+		while(true) {
+			ArrayList<Circle> temp = new ArrayList<Circle>();
+			for(int i = 0; i < allCircles.size(); i++) {
+				temp.add(allCircles.get(i));
+			}
+			for(Circle c:temp) {
+				if(!this.equals(c) && touching(c)) {
+					if(c.infected == 1) {
+						this.infected = 1;
+						this.setBackground(new Color(255, 0, 0));
 					}
-					for(Circle c:temp) {
-						if(!me.equals(c) && touching(c)) {
-							if(c.infected == 1) {
-								me.infected = 1;
-								me.setBackground(new Color(255, 0, 0));
-							}
-							bounceRectangle(me, c);
-						}
-					}
-					me.angle = getAngle(velocity[0],velocity[1]);
-					me.position[0] = (me.position[0] + me.velocity[0]);
-					me.position[1] = (me.position[1] + me.velocity[1]);
-					me.setLocation((int)(me.position[0] - me.sizeX/2), (int)(me.position[1] - me.sizeY/2));
-					try {
-						Thread.sleep(SPEED);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					bounceRectangle(this, c);
 				}
 			}
-		};
-		
-		thread.start();
+			this.angle = getAngle(velocity[0],velocity[1]);
+			this.position[0] = (this.position[0] + this.velocity[0]);
+			this.position[1] = (this.position[1] + this.velocity[1]);
+			this.setLocation((int)(this.position[0] - this.sizeX/2), (int)(this.position[1] - this.sizeY/2));
+			try {
+				Thread.sleep(SPEED);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public static void remove(Circle c) {
