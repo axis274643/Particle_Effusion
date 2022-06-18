@@ -1,6 +1,8 @@
 # Particle_Effusion
 Particle simulation bounce
+
 Created spring my freshman highschool year
+
 It started as what was supposed to be an infection game but turned out to become a particle simulator and then some strange game thing I have no idea
 
 Don't worry, I actually separated the different objects into different classes this time. Sort of. At least it's not all in one class. There's improvement.
