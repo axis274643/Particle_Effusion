@@ -10,3 +10,5 @@ Don't worry, I actually separated the different objects into different classes t
 Actually, I'm not really sure what happened here, sorry. What I do know is that I somehow managed to convert quantitative data into a SELF-UPDATING GRAPH!!! COOL!!!
 
 Actually, whenever I'm able to code ideas in my mind into reality it's really cool. That's probably what I like about coding. Just like what I like about drawing. Or writing. Or any other form of ing.
+
+Yeah that last update was because I forgot to do double returns again oops
