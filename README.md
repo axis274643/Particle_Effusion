@@ -11,5 +11,6 @@ Actually, whenever I'm able to code ideas in my mind into reality it's really co
 
 Yeah that last update was because I forgot to do double returns again oops
 
+![alt text](https://github.com/axis274643/Particle_Effusion/blob/master/Particle_Effusion_2022-06-18_20-16-47_AdobeExpress.gif)
 ![alt text](https://github.com/suchicatea/Particle_Effusion/blob/master/particlePIC.PNG)
 ![alt text](https://github.com/suchicatea/Particle_Effusion/blob/master/graphPIC.PNG)
